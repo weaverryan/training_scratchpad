@@ -1,0 +1,47 @@
+diff --git a/app/config/services.yml b/app/config/services.yml
+index 8ccfc77..c19f8fd 100644
+--- a/app/config/services.yml
++++ b/app/config/services.yml
+@@ -5,4 +5,13 @@ parameters:
+ 
+ services:
+     product_repository:
+-        class: AppBundle\Repository\ProductRepository
+\ No newline at end of file
++        class: AppBundle\Repository\ProductRepository
++        arguments: ['@db_connection']
++
++    db_connection:
++        class: PDO
++        arguments:
++            - "sqlite:%kernel.root_dir%/data.db"
++        calls:
++            # setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION)
++            - [setAttribute, [3, 2]]
+diff --git a/src/AppBundle/Repository/ProductRepository.php b/src/AppBundle/Repository/ProductRepository.php
+index 2ea5462..cb88b4e 100644
+--- a/src/AppBundle/Repository/ProductRepository.php
++++ b/src/AppBundle/Repository/ProductRepository.php
+@@ -6,14 +6,19 @@ use AppBundle\Model\Product;
+ 
+ class ProductRepository
+ {
++    private $pdo;
++
++    public function __construct(\PDO $pdo)
++    {
++        $this->pdo = $pdo;
++    }
++
+     /**
+      * @return Product[]
+      */
+     public function findAll()
+     {
+-        $db = new \PDO('sqlite:'.__DIR__.'/../../../app/data.db');
+-        $db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+-        $result = $db->query('SELECT * FROM product');
++        $result = $this->pdo->query('SELECT * FROM product');
+ 
+         $products = [];
+         foreach ($result as $row) {

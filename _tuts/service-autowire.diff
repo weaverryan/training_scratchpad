@@ -1,0 +1,13 @@
+diff --git a/app/config/services.yml b/app/config/services.yml
+index c19f8fd..1f06440 100644
+--- a/app/config/services.yml
++++ b/app/config/services.yml
+@@ -6,7 +6,7 @@ parameters:
+ services:
+     product_repository:
+         class: AppBundle\Repository\ProductRepository
+-        arguments: ['@db_connection']
++        autowire: true
+ 
+     db_connection:
+         class: PDO

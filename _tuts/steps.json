@@ -1,0 +1,40 @@
+{
+    "steps": [
+        {
+            "id": "start",
+            "name": "start",
+            "description": null
+        },
+        {
+            "id": "db-products-endpoint",
+            "name": "DB: \/products endpoint",
+            "description": null
+        },
+        {
+            "id": "model-add-product-model",
+            "name": "Model: Add Product model",
+            "description": null
+        },
+        {
+            "id": "repository-simple-productrepository",
+            "name": "Repository: Simple ProductRepository",
+            "description": null
+        },
+        {
+            "id": "repository-register-as-service",
+            "name": "Repository: Register as service",
+            "description": null
+        },
+        {
+            "id": "service-pdo-as-a-service",
+            "name": "Service: PDO as a service",
+            "description": null
+        },
+        {
+            "id": "service-autowire",
+            "name": "Service: autowire",
+            "description": null
+        }
+    ],
+    "sha": "64e6366bb4d9e86f1a5513390bc8dd16ca8f174f"
+}

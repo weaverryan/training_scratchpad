@@ -1,0 +1,28 @@
+diff --git a/app/config/services.yml b/app/config/services.yml
+index 5c76fc5..8ccfc77 100644
+--- a/app/config/services.yml
++++ b/app/config/services.yml
+@@ -4,6 +4,5 @@ parameters:
+ #    parameter_name: value
+ 
+ services:
+-#    service_name:
+-#        class: AppBundle\Directory\ClassName
+-#        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
++    product_repository:
++        class: AppBundle\Repository\ProductRepository
+\ No newline at end of file
+diff --git a/src/AppBundle/Controller/ProductController.php b/src/AppBundle/Controller/ProductController.php
+index 70fe617..bc11881 100644
+--- a/src/AppBundle/Controller/ProductController.php
++++ b/src/AppBundle/Controller/ProductController.php
+@@ -14,8 +14,7 @@ class ProductController extends Controller
+      */
+     public function indexAction()
+     {
+-        $repo = new ProductRepository();
+-        $products = $repo->findAll();
++        $products = $this->get('product_repository')->findAll();
+ 
+         return $this->render('product/index.html.twig', [
+             'products' => $products

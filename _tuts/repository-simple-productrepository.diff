@@ -1,0 +1,75 @@
+diff --git a/src/AppBundle/Controller/ProductController.php b/src/AppBundle/Controller/ProductController.php
+index 5894aa6..70fe617 100644
+--- a/src/AppBundle/Controller/ProductController.php
++++ b/src/AppBundle/Controller/ProductController.php
+@@ -3,6 +3,7 @@
+ namespace AppBundle\Controller;
+ 
+ use AppBundle\Model\Product;
++use AppBundle\Repository\ProductRepository;
+ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+ 
+@@ -13,21 +14,8 @@ class ProductController extends Controller
+      */
+     public function indexAction()
+     {
+-        $db = new \PDO('sqlite:'.__DIR__.'/../../../app/data.db');
+-        $db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+-        $result = $db->query('SELECT * FROM product');
+-
+-        $products = [];
+-        foreach ($result as $row) {
+-            $product = new Product();
+-            $product->setId($row['id']);
+-            $product->setName($row['name']);
+-            $product->setDescription($row['description']);
+-            $product->setPrice($row['price']);
+-            $product->setCreatedAt(\DateTime::createFromFormat('Y-m-d H:i:s', $row['created_at']));
+-
+-            $products[] = $product;
+-        }
++        $repo = new ProductRepository();
++        $products = $repo->findAll();
+ 
+         return $this->render('product/index.html.twig', [
+             'products' => $products
+diff --git a/src/AppBundle/Repository/ProductRepository.php b/src/AppBundle/Repository/ProductRepository.php
+new file mode 100644
+index 0000000..2ea5462
+--- /dev/null
++++ b/src/AppBundle/Repository/ProductRepository.php
+@@ -0,0 +1,32 @@
++<?php
++
++namespace AppBundle\Repository;
++
++use AppBundle\Model\Product;
++
++class ProductRepository
++{
++    /**
++     * @return Product[]
++     */
++    public function findAll()
++    {
++        $db = new \PDO('sqlite:'.__DIR__.'/../../../app/data.db');
++        $db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
++        $result = $db->query('SELECT * FROM product');
++
++        $products = [];
++        foreach ($result as $row) {
++            $product = new Product();
++            $product->setId($row['id']);
++            $product->setName($row['name']);
++            $product->setDescription($row['description']);
++            $product->setPrice($row['price']);
++            $product->setCreatedAt(\DateTime::createFromFormat('Y-m-d H:i:s', $row['created_at']));
++
++            $products[] = $product;
++        }
++
++        return $products;
++    }
++}
+\ No newline at end of file
