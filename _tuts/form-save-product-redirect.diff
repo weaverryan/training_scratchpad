@@ -1,0 +1,42 @@
+diff --git a/src/AppBundle/Controller/ProductController.php b/src/AppBundle/Controller/ProductController.php
+index 669f455..23030b0 100644
+--- a/src/AppBundle/Controller/ProductController.php
++++ b/src/AppBundle/Controller/ProductController.php
+@@ -32,7 +32,12 @@ class ProductController extends Controller
+ 
+         $form->handleRequest($request);
+         if ($form->isValid()) {
+-            dump($form->getData());die;
++            $this->get('product_repository')
++                ->insert($form->getData());
++
++            $this->addFlash('success', 'You did it!');
++
++            return $this->redirectToRoute('product_list');
+         }
+ 
+         return $this->render('product/new.html.twig', [
+diff --git a/src/AppBundle/Repository/ProductRepository.php b/src/AppBundle/Repository/ProductRepository.php
+index cb88b4e..1c8b5a7 100644
+--- a/src/AppBundle/Repository/ProductRepository.php
++++ b/src/AppBundle/Repository/ProductRepository.php
+@@ -34,4 +34,18 @@ class ProductRepository
+ 
+         return $products;
+     }
++
++    public function insert(Product $product)
++    {
++        $stmt = $this->pdo->prepare('
++            INSERT INTO product (name, description, price, created_at)
++            VALUES (:name, :description, :price, :createdAt)
++        ');
++        $stmt->bindValue(':name', $product->getName());
++        $stmt->bindValue(':description', $product->getDescription());
++        $stmt->bindValue(':price', $product->getPrice());
++        $stmt->bindValue(':createdAt', date('Y-m-d H:i:s'));
++
++        $stmt->execute();
++    }
+ }
+\ No newline at end of file

@@ -39,7 +39,62 @@
             "id": "service-autowire",
             "name": "Service: autowire",
             "description": null
+        },
+        {
+            "id": "form-blank-form-class",
+            "name": "Form: Blank form class",
+            "description": null
+        },
+        {
+            "id": "form-render-simple-form",
+            "name": "Form: Render simple form",
+            "description": null
+        },
+        {
+            "id": "form-processing-with-dump",
+            "name": "Form: processing with dump",
+            "description": null
+        },
+        {
+            "id": "form-add-data-class",
+            "name": "Form: add data_class",
+            "description": null
+        },
+        {
+            "id": "form-validation-and-label-customize",
+            "name": "Form: Validation and label customize",
+            "description": null
+        },
+        {
+            "id": "form-save-product-redirect",
+            "name": "Form: Save product, redirect",
+            "description": null
+        },
+        {
+            "id": "form-form-row",
+            "name": "Form: form_row",
+            "description": null
+        },
+        {
+            "id": "form-bootstrap-theme",
+            "name": "Form: Bootstrap theme",
+            "description": null
+        },
+        {
+            "id": "api-consume-api-for-products",
+            "name": "API: Consume API for \/products",
+            "description": null
+        },
+        {
+            "id": "api-register-client-as-service",
+            "name": "API: Register client as service",
+            "description": null
+        },
+        {
+            "id": "api-update-insert-to-use-api",
+            "name": "API: Update insert to use API",
+            "description": null
         }
     ],
-    "sha": "8d15d2ad0a1822c2d3f62f29d42b30a1e8204658"
+    "sha": "4523d7e47067b1b78084d8fa452f8985c70b479d"
 }

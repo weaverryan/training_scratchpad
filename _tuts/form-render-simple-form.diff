@@ -1,0 +1,77 @@
+diff --git a/app/Resources/views/product/new.html.twig b/app/Resources/views/product/new.html.twig
+new file mode 100644
+index 0000000..b0e6d96
+--- /dev/null
++++ b/app/Resources/views/product/new.html.twig
+@@ -0,0 +1,11 @@
++{% extends 'base.html.twig' %}
++
++{% block body %}
++    <h1>New Product</h1>
++
++    {{ form_start(form) }}
++        {{ form_widget(form) }}
++
++        <button type="submit">Save</button>
++    {{ form_end(form) }}
++{% endblock %}
+diff --git a/src/AppBundle/Controller/ProductController.php b/src/AppBundle/Controller/ProductController.php
+index bc11881..3e00f94 100644
+--- a/src/AppBundle/Controller/ProductController.php
++++ b/src/AppBundle/Controller/ProductController.php
+@@ -2,6 +2,7 @@
+ 
+ namespace AppBundle\Controller;
+ 
++use AppBundle\Form\ProductForm;
+ use AppBundle\Model\Product;
+ use AppBundle\Repository\ProductRepository;
+ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+@@ -20,4 +21,16 @@ class ProductController extends Controller
+             'products' => $products
+         ]);
+     }
++
++    /**
++     * @Route("/products/new", name="product_new")
++     */
++    public function newAction()
++    {
++        $form = $this->createForm(ProductForm::class);
++
++        return $this->render('product/new.html.twig', [
++            'form' => $form->createView()
++        ]);
++    }
+ }
+\ No newline at end of file
+diff --git a/src/AppBundle/Form/ProductForm.php b/src/AppBundle/Form/ProductForm.php
+new file mode 100644
+index 0000000..323e805
+--- /dev/null
++++ b/src/AppBundle/Form/ProductForm.php
+@@ -0,0 +1,24 @@
++<?php
++
++namespace AppBundle\Form;
++
++use Symfony\Component\Form\AbstractType;
++use Symfony\Component\Form\FormBuilderInterface;
++use Symfony\Component\OptionsResolver\OptionsResolver;
++
++class ProductForm extends AbstractType
++{
++    public function buildForm(FormBuilderInterface $builder, array $options)
++    {
++        $builder
++            ->add('name')
++            ->add('description')
++            ->add('price')
++        ;
++    }
++
++    public function configureOptions(OptionsResolver $resolver)
++    {
++
++    }
++}

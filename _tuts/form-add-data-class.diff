@@ -1,0 +1,14 @@
+diff --git a/src/AppBundle/Form/ProductForm.php b/src/AppBundle/Form/ProductForm.php
+index 323e805..3f735ff 100644
+--- a/src/AppBundle/Form/ProductForm.php
++++ b/src/AppBundle/Form/ProductForm.php
+@@ -19,6 +19,8 @@ class ProductForm extends AbstractType
+ 
+     public function configureOptions(OptionsResolver $resolver)
+     {
+-
++        $resolver->setDefaults([
++            'data_class' => 'AppBundle\Model\Product'
++        ]);
+     }
+ }

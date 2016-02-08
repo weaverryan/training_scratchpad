@@ -1,0 +1,13 @@
+diff --git a/app/config/config.yml b/app/config/config.yml
+index 5c9d9e2..1ecda66 100644
+--- a/app/config/config.yml
++++ b/app/config/config.yml
+@@ -37,6 +37,8 @@ framework:
+ twig:
+     debug:            "%kernel.debug%"
+     strict_variables: "%kernel.debug%"
++    form_themes:
++        - bootstrap_3_layout.html.twig
+ 
+ # Doctrine Configuration
+ doctrine:

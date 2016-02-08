@@ -1,0 +1,58 @@
+diff --git a/app/Resources/views/product/new.html.twig b/app/Resources/views/product/new.html.twig
+index b0e6d96..9a4830b 100644
+--- a/app/Resources/views/product/new.html.twig
++++ b/app/Resources/views/product/new.html.twig
+@@ -3,7 +3,9 @@
+ {% block body %}
+     <h1>New Product</h1>
+ 
+-    {{ form_start(form) }}
++    {{ form_start(form, {
++        'attr': {'novalidate': 'novalidate'}
++    }) }}
+         {{ form_widget(form) }}
+ 
+         <button type="submit">Save</button>
+diff --git a/src/AppBundle/Form/ProductForm.php b/src/AppBundle/Form/ProductForm.php
+index 3f735ff..1fa5dc0 100644
+--- a/src/AppBundle/Form/ProductForm.php
++++ b/src/AppBundle/Form/ProductForm.php
+@@ -3,6 +3,7 @@
+ namespace AppBundle\Form;
+ 
+ use Symfony\Component\Form\AbstractType;
++use Symfony\Component\Form\Extension\Core\Type\NumberType;
+ use Symfony\Component\Form\FormBuilderInterface;
+ use Symfony\Component\OptionsResolver\OptionsResolver;
+ 
+@@ -13,7 +14,9 @@ class ProductForm extends AbstractType
+         $builder
+             ->add('name')
+             ->add('description')
+-            ->add('price')
++            ->add('price', NumberType::class, [
++                'label' => 'MSRP'
++            ])
+         ;
+     }
+ 
+diff --git a/src/AppBundle/Model/Product.php b/src/AppBundle/Model/Product.php
+index 68a20f1..fd5e4ec 100644
+--- a/src/AppBundle/Model/Product.php
++++ b/src/AppBundle/Model/Product.php
+@@ -2,10 +2,15 @@
+ 
+ namespace AppBundle\Model;
+ 
++use Symfony\Component\Validator\Constraints as Assert;
++
+ class Product
+ {
+     private $id;
+ 
++    /**
++     * @Assert\NotBlank()
++     */
+     private $name;
+ 
+     private $description;

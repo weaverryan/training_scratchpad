@@ -1,0 +1,40 @@
+diff --git a/app/config/services.yml b/app/config/services.yml
+index 6c26792..5a08549 100644
+--- a/app/config/services.yml
++++ b/app/config/services.yml
+@@ -8,13 +8,8 @@ services:
+         class: AppBundle\Repository\ProductRepository
+         autowire: true
+ 
+-    db_connection:
+-        class: PDO
++    api_client:
++        class: GuzzleHttp\Client
+         arguments:
+-            - "sqlite:%kernel.root_dir%/data.db"
+-        calls:
+-            # setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION)
+-            - method: setAttribute
+-              arguments:
+-                - "@=constant('PDO::ATTR_ERRMODE')"
+-                - "@=constant('PDO::ERRMODE_EXCEPTION')"
++            -
++                base_uri: http://ec2-54-219-7-89.us-west-1.compute.amazonaws.com
+diff --git a/src/AppBundle/Repository/ProductRepository.php b/src/AppBundle/Repository/ProductRepository.php
+index 18772c7..14dfa8b 100644
+--- a/src/AppBundle/Repository/ProductRepository.php
++++ b/src/AppBundle/Repository/ProductRepository.php
+@@ -9,11 +9,9 @@ class ProductRepository
+ {
+     private $client;
+ 
+-    public function __construct()
++    public function __construct(Client $client)
+     {
+-        $this->client = new Client([
+-            'base_uri' => 'http://ec2-54-219-7-89.us-west-1.compute.amazonaws.com',
+-        ]);
++        $this->client = $client;
+     }
+ 
+     /**
