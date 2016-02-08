@@ -31,10 +31,15 @@
             "description": null
         },
         {
+            "id": "service-use-expression-language",
+            "name": "Service: use expression language",
+            "description": null
+        },
+        {
             "id": "service-autowire",
             "name": "Service: autowire",
             "description": null
         }
     ],
-    "sha": "64e6366bb4d9e86f1a5513390bc8dd16ca8f174f"
+    "sha": "8d15d2ad0a1822c2d3f62f29d42b30a1e8204658"
 }

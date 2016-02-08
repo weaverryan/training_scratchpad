@@ -1,0 +1,12 @@
+diff --git a/app/config/services.yml b/app/config/services.yml
+index ccd3e0a..04c90f2 100644
+--- a/app/config/services.yml
++++ b/app/config/services.yml
+@@ -15,4 +15,6 @@ services:
+         calls:
+             # setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION)
+             - method: setAttribute
+-              arguments: [3, 2]
++              arguments:
++                - "@=constant('PDO::ATTR_ERRMODE')"
++                - "@=constant('PDO::ERRMODE_EXCEPTION')"
