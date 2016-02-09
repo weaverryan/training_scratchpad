@@ -1,0 +1,53 @@
+diff --git a/app/Resources/views/base.html.twig b/app/Resources/views/base.html.twig
+index bafd28d..fb88e17 100644
+--- a/app/Resources/views/base.html.twig
++++ b/app/Resources/views/base.html.twig
+@@ -7,6 +7,9 @@
+         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+     </head>
+     <body>
++    {% for msg in app.session.flashbag.get('success') %}
++        {{ msg }}
++    {% endfor %}
+         {% block body %}{% endblock %}
+         {% block javascripts %}{% endblock %}
+     </body>
+diff --git a/app/Resources/views/product/index.html.twig b/app/Resources/views/product/index.html.twig
+index a8d2add..4c82f21 100644
+--- a/app/Resources/views/product/index.html.twig
++++ b/app/Resources/views/product/index.html.twig
+@@ -1,6 +1,8 @@
+ {% extends 'base.html.twig' %}
+ 
+ {% block body %}
++    <a href="{{ path('product_new') }}">New Product</a>
++
+     {% for product in products %}
+         <div>
+             <h3>{{ product.name }}</h3>
+diff --git a/tests/AppBundle/Controller/ProductControllerTest.php b/tests/AppBundle/Controller/ProductControllerTest.php
+index 1e5a511..7737640 100644
+--- a/tests/AppBundle/Controller/ProductControllerTest.php
++++ b/tests/AppBundle/Controller/ProductControllerTest.php
+@@ -19,4 +19,21 @@ class ProductControllerTest extends \PHPUnit_Framework_TestCase
+         $page = $session->getPage();
+         $this->assertCount(2, $page->findAll('css', 'h3'));
+     }
++
++    public function testAddProducts()
++    {
++        $driver = new GoutteDriver();
++        $session = new Session($driver);
++
++        $session->visit('http://localhost:9004/app_test.php/products');
++
++        $page = $session->getPage();
++        $page->clickLink('New Product');
++        $page->fillField('Name', 'Foo');
++        $page->fillField('Description', 'Description');
++        $page->fillField('MSRP', '5.99');
++        $page->pressButton('Save');
++
++        $this->assertContains('You did it!', $page->getText());
++    }
+ }

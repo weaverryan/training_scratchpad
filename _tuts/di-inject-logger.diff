@@ -1,0 +1,61 @@
+diff --git a/app/config/services.yml b/app/config/services.yml
+index 5a08549..98bd050 100644
+--- a/app/config/services.yml
++++ b/app/config/services.yml
+@@ -7,6 +7,9 @@ services:
+     product_repository:
+         class: AppBundle\Repository\ProductRepository
+         autowire: true
++        arguments:
++            - '@api_client'
++            - '@logger'
+ 
+     api_client:
+         class: GuzzleHttp\Client
+diff --git a/src/AppBundle/Repository/ProductRepository.php b/src/AppBundle/Repository/ProductRepository.php
+index 1bcc55f..70db41a 100644
+--- a/src/AppBundle/Repository/ProductRepository.php
++++ b/src/AppBundle/Repository/ProductRepository.php
+@@ -4,14 +4,18 @@ namespace AppBundle\Repository;
+ 
+ use AppBundle\Model\Product;
+ use GuzzleHttp\Client;
++use Psr\Log\LoggerInterface;
+ 
+ class ProductRepository
+ {
+     private $client;
+ 
+-    public function __construct(Client $client)
++    private $logger;
++
++    public function __construct(Client $client, LoggerInterface $logger)
+     {
+         $this->client = $client;
++        $this->logger = $logger;
+     }
+ 
+     /**
+@@ -39,6 +43,7 @@ class ProductRepository
+ 
+             $products[] = $product;
+         }
++        $this->logger->info(sprintf('Returning %s products', count($products)));
+ 
+         return $products;
+     }
+diff --git a/tests/AppBundle/Repository/ProductRepositoryTest.php b/tests/AppBundle/Repository/ProductRepositoryTest.php
+index 01df28c..386b07d 100644
+--- a/tests/AppBundle/Repository/ProductRepositoryTest.php
++++ b/tests/AppBundle/Repository/ProductRepositoryTest.php
+@@ -29,7 +29,9 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
+         $client->get('/products.json')
+             ->willReturn(new Response(200, [], json_encode($productsData)));
+ 
+-        $repo = new ProductRepository($client->reveal());
++        $logger = $this->prophesize('Psr\Log\LoggerInterface');
++
++        $repo = new ProductRepository($client->reveal(), $logger->reveal());
+ 
+         $products = $repo->findAll();
+         $this->assertCount(2, $products);

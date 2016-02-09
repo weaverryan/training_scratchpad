@@ -1,0 +1,33 @@
+diff --git a/tests/AppBundle/Repository/ProductRepositoryTest.php b/tests/AppBundle/Repository/ProductRepositoryTest.php
+index 386b07d..a8336ad 100644
+--- a/tests/AppBundle/Repository/ProductRepositoryTest.php
++++ b/tests/AppBundle/Repository/ProductRepositoryTest.php
+@@ -4,11 +4,14 @@ namespace Tests\AppBundle\Repository;
+ 
+ use AppBundle\Repository\ProductRepository;
+ use GuzzleHttp\Psr7\Response;
++use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+ 
+-class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
++class ProductRepositoryTest extends KernelTestCase
+ {
+     public function testFindAll()
+     {
++        self::bootKernel();
++
+         $productsData = [];
+         $productsData[] = [
+             'id' => 10,
+@@ -31,7 +34,11 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
+ 
+         $logger = $this->prophesize('Psr\Log\LoggerInterface');
+ 
+-        $repo = new ProductRepository($client->reveal(), $logger->reveal());
++        $repo = new ProductRepository(
++            $client->reveal(),
++            $logger->reveal(),
++            self::$kernel->getContainer()->get('serializer')
++        );
+ 
+         $products = $repo->findAll();
+         $this->assertCount(2, $products);

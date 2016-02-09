@@ -1,0 +1,37 @@
+diff --git a/src/AppBundle/Test/FunctionalTestCase.php b/src/AppBundle/Test/FunctionalTestCase.php
+index 3354a40..316aeb9 100644
+--- a/src/AppBundle/Test/FunctionalTestCase.php
++++ b/src/AppBundle/Test/FunctionalTestCase.php
+@@ -22,4 +22,10 @@ class FunctionalTestCase extends KernelTestCase
+ 
+         return $this->session;
+     }
++
++    protected function visit($uri)
++    {
++        $this->getSession()->visit('http://localhost:9004/app_test.php/'.ltrim($uri, '/'));
++    }
++
+ }
+diff --git a/tests/AppBundle/Controller/ProductControllerTest.php b/tests/AppBundle/Controller/ProductControllerTest.php
+index 06212df..612936b 100644
+--- a/tests/AppBundle/Controller/ProductControllerTest.php
++++ b/tests/AppBundle/Controller/ProductControllerTest.php
+@@ -13,7 +13,7 @@ class ProductControllerTest extends FunctionalTestCase
+     {
+         $session = $this->getSession();
+ 
+-        $session->visit('http://localhost:9004/app_test.php/products');
++        $this->visit('/products');
+         $this->assertEquals(200, $session->getStatusCode());
+ 
+         $page = $session->getPage();
+@@ -24,7 +24,7 @@ class ProductControllerTest extends FunctionalTestCase
+     {
+         $session = $this->getSession();
+ 
+-        $session->visit('http://localhost:9004/app_test.php/products');
++        $this->visit('/products');
+ 
+         $page = $session->getPage();
+         $page->clickLink('New Product');

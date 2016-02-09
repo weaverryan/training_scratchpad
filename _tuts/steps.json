@@ -94,7 +94,67 @@
             "id": "api-update-insert-to-use-api",
             "name": "API: Update insert to use API",
             "description": null
+        },
+        {
+            "id": "test-basic-repo-unit-test",
+            "name": "Test: Basic repo unit test",
+            "description": null
+        },
+        {
+            "id": "di-inject-logger",
+            "name": "DI: Inject logger",
+            "description": null
+        },
+        {
+            "id": "di-inject-serializer-and-use",
+            "name": "DI: Inject serializer and use",
+            "description": null
+        },
+        {
+            "id": "test-boot-kernel-use-real-serializer",
+            "name": "Test: Boot kernel, use real serializer",
+            "description": null
+        },
+        {
+            "id": "functional-install-mink",
+            "name": "Functional: Install Mink",
+            "description": null
+        },
+        {
+            "id": "functional-basic-list-test",
+            "name": "Functional: Basic list test",
+            "description": null
+        },
+        {
+            "id": "functional-test-env-override-service",
+            "name": "Functional: test env, override service",
+            "description": null
+        },
+        {
+            "id": "functional-count-h3",
+            "name": "Functional: Count h3",
+            "description": null
+        },
+        {
+            "id": "functional-test-form",
+            "name": "Functional: Test form",
+            "description": null
+        },
+        {
+            "id": "functional-new-base-class",
+            "name": "Functional: new base class",
+            "description": null
+        },
+        {
+            "id": "functional-visit-base-method",
+            "name": "Functional: visit base method",
+            "description": null
+        },
+        {
+            "id": "functional-base-url-env-var",
+            "name": "Functional: base url env var",
+            "description": null
         }
     ],
-    "sha": "4523d7e47067b1b78084d8fa452f8985c70b479d"
+    "sha": "826a54a2059530e400ad5075582148414d413ac8"
 }

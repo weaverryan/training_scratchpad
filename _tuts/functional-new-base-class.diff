@@ -1,0 +1,65 @@
+diff --git a/src/AppBundle/Test/FunctionalTestCase.php b/src/AppBundle/Test/FunctionalTestCase.php
+new file mode 100644
+index 0000000..3354a40
+--- /dev/null
++++ b/src/AppBundle/Test/FunctionalTestCase.php
+@@ -0,0 +1,25 @@
++<?php
++
++namespace AppBundle\Test;
++
++use Behat\Mink\Driver\GoutteDriver;
++use Behat\Mink\Session;
++use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
++
++class FunctionalTestCase extends KernelTestCase
++{
++    private $session;
++
++    /**
++     * @return Session
++     */
++    public function getSession()
++    {
++        if ($this->session === null) {
++            $driver = new GoutteDriver();
++            $this->session = new Session($driver);
++        }
++
++        return $this->session;
++    }
++}
+diff --git a/tests/AppBundle/Controller/ProductControllerTest.php b/tests/AppBundle/Controller/ProductControllerTest.php
+index 7737640..06212df 100644
+--- a/tests/AppBundle/Controller/ProductControllerTest.php
++++ b/tests/AppBundle/Controller/ProductControllerTest.php
+@@ -2,16 +2,16 @@
+ 
+ namespace Tests\AppBundle\Controller;
+ 
++use AppBundle\Test\FunctionalTestCase;
+ use Behat\Mink\Driver\GoutteDriver;
+ use Behat\Mink\Session;
+ use GuzzleHttp\Client;
+ 
+-class ProductControllerTest extends \PHPUnit_Framework_TestCase
++class ProductControllerTest extends FunctionalTestCase
+ {
+     public function testListProducts()
+     {
+-        $driver = new GoutteDriver();
+-        $session = new Session($driver);
++        $session = $this->getSession();
+ 
+         $session->visit('http://localhost:9004/app_test.php/products');
+         $this->assertEquals(200, $session->getStatusCode());
+@@ -22,8 +22,7 @@ class ProductControllerTest extends \PHPUnit_Framework_TestCase
+ 
+     public function testAddProducts()
+     {
+-        $driver = new GoutteDriver();
+-        $session = new Session($driver);
++        $session = $this->getSession();
+ 
+         $session->visit('http://localhost:9004/app_test.php/products');
+ 

@@ -1,0 +1,26 @@
+diff --git a/phpunit.xml.dist b/phpunit.xml.dist
+index a2a0910..49fb5b2 100644
+--- a/phpunit.xml.dist
++++ b/phpunit.xml.dist
+@@ -19,6 +19,7 @@
+ 
+     <php>
+         <server name="KERNEL_DIR" value="app/" />
++        <env name="TEST_BASE_URL" value="http://localhost:9004" />
+     </php>
+ 
+     <filter>
+diff --git a/src/AppBundle/Test/FunctionalTestCase.php b/src/AppBundle/Test/FunctionalTestCase.php
+index 316aeb9..ea93dc7 100644
+--- a/src/AppBundle/Test/FunctionalTestCase.php
++++ b/src/AppBundle/Test/FunctionalTestCase.php
+@@ -25,7 +25,7 @@ class FunctionalTestCase extends KernelTestCase
+ 
+     protected function visit($uri)
+     {
+-        $this->getSession()->visit('http://localhost:9004/app_test.php/'.ltrim($uri, '/'));
++        $baseUrl = getenv('TEST_BASE_URL');
++        $this->getSession()->visit($baseUrl.'/'.ltrim($uri, '/'));
+     }
+-
+ }

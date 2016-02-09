@@ -1,0 +1,156 @@
+diff --git a/app/config/config_test.yml b/app/config/config_test.yml
+index 2f6d925..4d0556a 100644
+--- a/app/config/config_test.yml
++++ b/app/config/config_test.yml
+@@ -1,6 +1,9 @@
+ imports:
+     - { resource: config_dev.yml }
+ 
++parameters:
++    product_repository_class: AppBundle\Repository\Test\FakedProductRepository
++
+ framework:
+     test: ~
+     session:
+diff --git a/app/config/services.yml b/app/config/services.yml
+index 98bd050..d3ccf8c 100644
+--- a/app/config/services.yml
++++ b/app/config/services.yml
+@@ -1,11 +1,11 @@
+ # Learn more about services, parameters and containers at
+ # http://symfony.com/doc/current/book/service_container.html
+ parameters:
+-#    parameter_name: value
++    product_repository_class: AppBundle\Repository\ProductRepository
+ 
+ services:
+     product_repository:
+-        class: AppBundle\Repository\ProductRepository
++        class: %product_repository_class%
+         autowire: true
+         arguments:
+             - '@api_client'
+diff --git a/src/AppBundle/Repository/ProductRepository.php b/src/AppBundle/Repository/ProductRepository.php
+index 0f8b0af..b721ee1 100644
+--- a/src/AppBundle/Repository/ProductRepository.php
++++ b/src/AppBundle/Repository/ProductRepository.php
+@@ -27,14 +27,7 @@ class ProductRepository
+      */
+     public function findAll()
+     {
+-        $response = $this->client->get('/products.json');
+-
+-        $data = json_decode($response->getBody(), true);
+-        if (false === $data) {
+-            // error handling
+-            // PSR-7
+-            throw new \Exception('Bad response! '.$response->getBody());
+-        }
++        $data = $this->getJson('/products.json');
+ 
+         $products = [];
+         foreach ($data as $row) {
+@@ -58,4 +51,23 @@ class ProductRepository
+             'body' => $this->serializer->serialize($product, 'json')
+         ]);
+     }
++
++    /**
++     * @param string $uri
++     * @return array
++     * @throws \Exception
++     */
++    protected function getJson($uri)
++    {
++        $response = $this->client->get($uri);
++
++        $data = json_decode($response->getBody(), true);
++        if (false === $data) {
++            // error handling
++            // PSR-7
++            throw new \Exception('Bad response! '.$response->getBody());
++        }
++
++        return $data;
++    }
+ }
+\ No newline at end of file
+diff --git a/src/AppBundle/Repository/Test/FakedProductRepository.php b/src/AppBundle/Repository/Test/FakedProductRepository.php
+new file mode 100644
+index 0000000..7bbec77
+--- /dev/null
++++ b/src/AppBundle/Repository/Test/FakedProductRepository.php
+@@ -0,0 +1,34 @@
++<?php
++
++namespace AppBundle\Repository\Test;
++
++use AppBundle\Repository\ProductRepository;
++
++class FakedProductRepository extends ProductRepository
++{
++    protected function getJson($uri)
++    {
++        if ($uri == '/products.json') {
++            $products = [];
++            $products[] = [
++                'id' => 10,
++                'name' => 'Test Product',
++                'price' => 99,
++                'description' => 'Lorem ipsum',
++                'created_at' => '2015-12-06 12:15:30'
++            ];
++            $products[] = [
++                'id' => 15,
++                'name' => 'Test Product2',
++                'price' => 30,
++                'description' => 'Baz bazzles description',
++                'created_at' => '2016-01-15 23:00:05'
++            ];
++
++            return $products;
++        }
++
++        throw new \Exception('Unsupported url: '.$uri);
++    }
++
++}
+\ No newline at end of file
+diff --git a/web/app_test.php b/web/app_test.php
+new file mode 100644
+index 0000000..6d168d3
+--- /dev/null
++++ b/web/app_test.php
+@@ -0,0 +1,32 @@
++<?php
++
++use Symfony\Component\HttpFoundation\Request;
++use Symfony\Component\Debug\Debug;
++
++// If you don't want to setup permissions the proper way, just uncomment the following PHP line
++// read http://symfony.com/doc/current/book/installation.html#checking-symfony-application-configuration-and-setup
++// for more information
++//umask(0000);
++
++// This check prevents access to debug front controllers that are deployed by accident to production servers.
++// Feel free to remove this, extend it, or make something more sophisticated.
++if (isset($_SERVER['HTTP_CLIENT_IP'])
++    || isset($_SERVER['HTTP_X_FORWARDED_FOR'])
++    || !(in_array(@$_SERVER['REMOTE_ADDR'], ['127.0.0.1', 'fe80::1', '::1']) || php_sapi_name() === 'cli-server')
++) {
++    header('HTTP/1.0 403 Forbidden');
++    exit('You are not allowed to access this file. Check '.basename(__FILE__).' for more information.');
++}
++
++/**
++ * @var Composer\Autoload\ClassLoader $loader
++ */
++$loader = require __DIR__.'/../app/autoload.php';
++Debug::enable();
++
++$kernel = new AppKernel('test', true);
++$kernel->loadClassCache();
++$request = Request::createFromGlobals();
++$response = $kernel->handle($request);
++$response->send();
++$kernel->terminate($request, $response);
