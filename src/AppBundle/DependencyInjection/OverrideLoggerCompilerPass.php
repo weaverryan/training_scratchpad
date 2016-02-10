@@ -9,7 +9,11 @@ class OverrideLoggerCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        $loggerDefinition = $container->findDefinition('logger');die;
+        $loggerDefinition = $container->findDefinition('logger');
 
+        $loggerDefinition->addMethodCall(
+            'debug',
+            ['The logger has been initialized']
+        );
     }
 }
