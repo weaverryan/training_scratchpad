@@ -16,6 +16,8 @@ class ProductController extends Controller
      */
     public function indexAction()
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         $products = $this->get('product_repository')->findAll();
 
         return $this->render('product/index.html.twig', [
