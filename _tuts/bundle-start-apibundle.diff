@@ -1,0 +1,36 @@
+diff --git a/app/AppKernel.php b/app/AppKernel.php
+index 3789b32..461cc9c 100644
+--- a/app/AppKernel.php
++++ b/app/AppKernel.php
+@@ -1,5 +1,6 @@
+ <?php
+ 
++use ApiBundle\ApiBundle;
+ use Symfony\Component\HttpKernel\Kernel;
+ use Symfony\Component\Config\Loader\LoaderInterface;
+ 
+@@ -16,6 +17,7 @@ class AppKernel extends Kernel
+             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
+             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
+             new AppBundle\AppBundle(),
++            new ApiBundle(),
+         ];
+ 
+         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
+diff --git a/src/ApiBundle/ApiBundle.php b/src/ApiBundle/ApiBundle.php
+new file mode 100644
+index 0000000..c3431c6
+--- /dev/null
++++ b/src/ApiBundle/ApiBundle.php
+@@ -0,0 +1,10 @@
++<?php
++
++namespace ApiBundle;
++
++use Symfony\Component\HttpKernel\Bundle\Bundle;
++
++class ApiBundle extends Bundle
++{
++
++}
+\ No newline at end of file

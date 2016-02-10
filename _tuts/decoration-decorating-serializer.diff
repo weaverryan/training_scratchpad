@@ -1,0 +1,72 @@
+diff --git a/app/config/services.yml b/app/config/services.yml
+index f8e4d93..5b26091 100644
+--- a/app/config/services.yml
++++ b/app/config/services.yml
+@@ -10,6 +10,7 @@ services:
+         arguments:
+             - '@api_client'
+             - '@logger'
++            - '@serializer'
+ 
+     api_client:
+         class: GuzzleHttp\Client
+@@ -29,3 +30,9 @@ services:
+         autowire: true
+         tags:
+             - { name: security.voter }
++
++    our_serializer:
++        class: AppBundle\Serializer\OurSerializer
++        decorates: serializer
++        public: false
++        arguments: ['@our_serializer.inner', '@logger']
+diff --git a/src/AppBundle/Controller/ProductController.php b/src/AppBundle/Controller/ProductController.php
+index 63c00c4..e4d4b59 100644
+--- a/src/AppBundle/Controller/ProductController.php
++++ b/src/AppBundle/Controller/ProductController.php
+@@ -20,6 +20,8 @@ class ProductController extends Controller
+ 
+         $products = $this->get('product_repository')->findAll();
+ 
++        $this->get('serializer')->serialize($products, 'json');
++
+         return $this->render('product/index.html.twig', [
+             'products' => $products
+         ]);
+diff --git a/src/AppBundle/Serializer/OurSerializer.php b/src/AppBundle/Serializer/OurSerializer.php
+new file mode 100644
+index 0000000..c7bfe4c
+--- /dev/null
++++ b/src/AppBundle/Serializer/OurSerializer.php
+@@ -0,0 +1,31 @@
++<?php
++
++namespace AppBundle\Serializer;
++
++use Psr\Log\LoggerInterface;
++use Symfony\Component\Serializer\SerializerInterface;
++
++class OurSerializer implements SerializerInterface
++{
++    private $serializer;
++    private $logger;
++
++    public function __construct(SerializerInterface $serializer, LoggerInterface $logger)
++    {
++        $this->serializer = $serializer;
++        $this->logger = $logger;
++    }
++
++    public function serialize($data, $format, array $context = array())
++    {
++        $this->logger->info('serializing!');
++
++        $this->serializer->serialize($data, $format, $context);
++    }
++
++    public function deserialize($data, $type, $format, array $context = array())
++    {
++        $this->serializer->deserialize($data, $format, $context);
++    }
++
++}

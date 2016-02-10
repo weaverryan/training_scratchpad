@@ -194,7 +194,47 @@
             "id": "security-logout",
             "name": "Security: Logout",
             "description": null
+        },
+        {
+            "id": "voter-create-randomvoter",
+            "name": "Voter: Create RandomVoter",
+            "description": null
+        },
+        {
+            "id": "compilerpass-create-empty-pass",
+            "name": "CompilerPass: Create empty pass",
+            "description": null
+        },
+        {
+            "id": "compilerpass-add-method-call",
+            "name": "CompilerPass: Add method call",
+            "description": null
+        },
+        {
+            "id": "decoration-decorating-serializer",
+            "name": "Decoration: decorating serializer",
+            "description": null
+        },
+        {
+            "id": "bundle-start-apibundle",
+            "name": "Bundle: Start ApiBundle",
+            "description": null
+        },
+        {
+            "id": "bundle-add-service-config",
+            "name": "Bundle: Add service config",
+            "description": null
+        },
+        {
+            "id": "bundle-die",
+            "name": "Bundle: DIE",
+            "description": null
+        },
+        {
+            "id": "bundle-add-configuration",
+            "name": "Bundle: Add Configuration",
+            "description": null
         }
     ],
-    "sha": "df3abac36fcc7a80b6ebea2eb4d8b171f6a9f3f1"
+    "sha": "2f98fba8c00aa49879bad0eb68f2ed5cfd7a1ff1"
 }

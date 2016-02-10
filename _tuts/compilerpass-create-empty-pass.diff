@@ -1,0 +1,41 @@
+diff --git a/src/AppBundle/AppBundle.php b/src/AppBundle/AppBundle.php
+index 05123b6..ad85a66 100644
+--- a/src/AppBundle/AppBundle.php
++++ b/src/AppBundle/AppBundle.php
+@@ -2,8 +2,15 @@
+ 
+ namespace AppBundle;
+ 
++use AppBundle\DependencyInjection\OverrideLoggerCompilerPass;
++use Symfony\Component\DependencyInjection\ContainerBuilder;
+ use Symfony\Component\HttpKernel\Bundle\Bundle;
+ 
+ class AppBundle extends Bundle
+ {
++    public function build(ContainerBuilder $container)
++    {
++        $container->addCompilerPass(new OverrideLoggerCompilerPass());
++    }
++
+ }
+diff --git a/src/AppBundle/DependencyInjection/OverrideLoggerCompilerPass.php b/src/AppBundle/DependencyInjection/OverrideLoggerCompilerPass.php
+new file mode 100644
+index 0000000..f8a2c76
+--- /dev/null
++++ b/src/AppBundle/DependencyInjection/OverrideLoggerCompilerPass.php
+@@ -0,0 +1,15 @@
++<?php
++
++namespace AppBundle\DependencyInjection;
++
++use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
++use Symfony\Component\DependencyInjection\ContainerBuilder;
++
++class OverrideLoggerCompilerPass implements CompilerPassInterface
++{
++    public function process(ContainerBuilder $container)
++    {
++        $loggerDefinition = $container->findDefinition('logger');die;
++
++    }
++}

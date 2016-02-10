@@ -1,0 +1,86 @@
+diff --git a/app/config/config.yml b/app/config/config.yml
+index 60b03d1..7329515 100644
+--- a/app/config/config.yml
++++ b/app/config/config.yml
+@@ -70,3 +70,6 @@ swiftmailer:
+     username:  "%mailer_user%"
+     password:  "%mailer_password%"
+     spool:     { type: memory }
++
++api:
++    api_url: http://ec2-54-219-7-89.us-west-1.compute.amazonaws.com
+diff --git a/src/ApiBundle/DependencyInjection/ApiExtension.php b/src/ApiBundle/DependencyInjection/ApiExtension.php
+index 6fe5b92..3a86406 100644
+--- a/src/ApiBundle/DependencyInjection/ApiExtension.php
++++ b/src/ApiBundle/DependencyInjection/ApiExtension.php
+@@ -16,5 +16,9 @@ class ApiExtension extends Extension
+             new FileLocator(__DIR__.'/../Resources/config')
+         );
+         $loader->load('services.yml');
++
++        $configuration = $this->getConfiguration($configs, $container);
++        $config = $this->processConfiguration($configuration, $configs);
++        $container->setParameter('api.host', $config['api_url']);
+     }
+ }
+\ No newline at end of file
+diff --git a/src/ApiBundle/DependencyInjection/Configuration.php b/src/ApiBundle/DependencyInjection/Configuration.php
+new file mode 100644
+index 0000000..26f7f4e
+--- /dev/null
++++ b/src/ApiBundle/DependencyInjection/Configuration.php
+@@ -0,0 +1,26 @@
++<?php
++
++namespace ApiBundle\DependencyInjection;
++
++use Symfony\Component\Config\Definition\Builder\TreeBuilder;
++use Symfony\Component\Config\Definition\ConfigurationInterface;
++
++class Configuration implements ConfigurationInterface
++{
++    public function getConfigTreeBuilder()
++    {
++        $treeBuilder = new TreeBuilder();
++        $rootNode = $treeBuilder->root('monolog');
++
++        $rootNode
++            ->children()
++                ->scalarNode('api_url')
++                    ->isRequired()
++                    ->info('The URL to the API')
++                ->end()
++            ->end()
++        ;
++
++        return $treeBuilder;
++    }
++}
+\ No newline at end of file
+diff --git a/src/ApiBundle/Resources/config/services.yml b/src/ApiBundle/Resources/config/services.yml
+index 964aef6..a145918 100644
+--- a/src/ApiBundle/Resources/config/services.yml
++++ b/src/ApiBundle/Resources/config/services.yml
+@@ -3,7 +3,8 @@ services:
+         class: GuzzleHttp\Client
+         arguments:
+             -
+-                base_uri: http://ec2-54-219-7-89.us-west-1.compute.amazonaws.com
++                base_uri: %api.host%
++        public: false
+ 
+     api.repository.product_repository:
+         class: AppBundle\Repository\ProductRepository
+diff --git a/src/AppBundle/Controller/ProductController.php b/src/AppBundle/Controller/ProductController.php
+index e4d4b59..5e5029a 100644
+--- a/src/AppBundle/Controller/ProductController.php
++++ b/src/AppBundle/Controller/ProductController.php
+@@ -18,7 +18,7 @@ class ProductController extends Controller
+     {
+         $this->denyAccessUnlessGranted('ROLE_USER');
+ 
+-        $products = $this->get('product_repository')->findAll();
++        $products = $this->get('api.repository.product_repository')->findAll();
+ 
+         $this->get('serializer')->serialize($products, 'json');
+ 

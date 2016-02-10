@@ -1,0 +1,128 @@
+diff --git a/app/Resources/views/product/index.html.twig b/app/Resources/views/product/index.html.twig
+index 4c82f21..458f648 100644
+--- a/app/Resources/views/product/index.html.twig
++++ b/app/Resources/views/product/index.html.twig
+@@ -5,7 +5,11 @@
+ 
+     {% for product in products %}
+         <div>
+-            <h3>{{ product.name }}</h3>
++            <h3>
++                <a href="{{ path('product_show', {'id': product.id}) }}">
++                    {{ product.name }}
++                </a>
++            </h3>
+             {{ product.description }}
+             {{ product.price }}
+             {{ product.createdAt|date('Y-m-d') }}
+diff --git a/app/config/services.yml b/app/config/services.yml
+index 4961c49..f8e4d93 100644
+--- a/app/config/services.yml
++++ b/app/config/services.yml
+@@ -23,3 +23,9 @@ services:
+ 
+     our_user_provider:
+         class: AppBundle\Security\OurUserProvider
++
++    random_voter:
++        class: AppBundle\Security\RandomVoter
++        autowire: true
++        tags:
++            - { name: security.voter }
+diff --git a/src/AppBundle/Controller/ProductController.php b/src/AppBundle/Controller/ProductController.php
+index 654133f..63c00c4 100644
+--- a/src/AppBundle/Controller/ProductController.php
++++ b/src/AppBundle/Controller/ProductController.php
+@@ -46,4 +46,17 @@ class ProductController extends Controller
+             'form' => $form->createView()
+         ]);
+     }
++
++    /**
++     * @Route("/products/{id}", name="product_show")
++     */
++    public function showAction($id)
++    {
++        $product = $this->get('product_repository')
++            ->find($id);
++
++        $this->denyAccessUnlessGranted('EDIT', $product);
++
++        die('access granted!');
++    }
+ }
+\ No newline at end of file
+diff --git a/src/AppBundle/Repository/ProductRepository.php b/src/AppBundle/Repository/ProductRepository.php
+index b721ee1..2d93e3c 100644
+--- a/src/AppBundle/Repository/ProductRepository.php
++++ b/src/AppBundle/Repository/ProductRepository.php
+@@ -53,6 +53,18 @@ class ProductRepository
+     }
+ 
+     /**
++     * @param $id
++     * @return Product
++     * @throws \Exception
++     */
++    public function find($id)
++    {
++        $data = $this->getJson(sprintf('/products/%s.json', $id));
++
++        return $this->hydrateProduct($data);
++    }
++
++    /**
+      * @param string $uri
+      * @return array
+      * @throws \Exception
+@@ -70,4 +82,16 @@ class ProductRepository
+ 
+         return $data;
+     }
++
++    private function hydrateProduct(array $data)
++    {
++        $product = new Product();
++        $product->setId($data['id']);
++        $product->setName($data['name']);
++        $product->setDescription($data['description']);
++        $product->setPrice($data['price']);
++        $product->setCreatedAt(\DateTime::createFromFormat('Y-m-d H:i:s', $data['created_at']));
++
++        return $product;
++    }
+ }
+\ No newline at end of file
+diff --git a/src/AppBundle/Security/RandomVoter.php b/src/AppBundle/Security/RandomVoter.php
+new file mode 100644
+index 0000000..c3b3cef
+--- /dev/null
++++ b/src/AppBundle/Security/RandomVoter.php
+@@ -0,0 +1,26 @@
++<?php
++
++namespace AppBundle\Security;
++
++use AppBundle\Model\Product;
++use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
++use Symfony\Component\Security\Core\Authorization\Voter\Voter;
++
++class RandomVoter extends Voter
++{
++    protected function supports($attribute, $subject)
++    {
++        return $subject instanceof Product;
++    }
++
++    protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
++    {
++        switch ($attribute) {
++            case 'EDIT':
++                return rand(1, 10) > 5;
++            default:
++                throw new \Exception('Unsupported attribute: '.$attribute);
++        }
++    }
++
++}
+\ No newline at end of file

@@ -1,0 +1,17 @@
+diff --git a/src/AppBundle/DependencyInjection/OverrideLoggerCompilerPass.php b/src/AppBundle/DependencyInjection/OverrideLoggerCompilerPass.php
+index f8a2c76..af1f30b 100644
+--- a/src/AppBundle/DependencyInjection/OverrideLoggerCompilerPass.php
++++ b/src/AppBundle/DependencyInjection/OverrideLoggerCompilerPass.php
+@@ -9,7 +9,11 @@ class OverrideLoggerCompilerPass implements CompilerPassInterface
+ {
+     public function process(ContainerBuilder $container)
+     {
+-        $loggerDefinition = $container->findDefinition('logger');die;
++        $loggerDefinition = $container->findDefinition('logger');
+ 
++        $loggerDefinition->addMethodCall(
++            'debug',
++            ['The logger has been initialized']
++        );
+     }
+ }
