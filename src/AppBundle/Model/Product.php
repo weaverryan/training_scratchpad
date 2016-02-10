@@ -2,10 +2,15 @@
 
 namespace AppBundle\Model;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 class Product
 {
     private $id;
 
+    /**
+     * @Assert\NotBlank()
+     */
     private $name;
 
     private $description;
