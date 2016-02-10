@@ -3,14 +3,17 @@
 namespace AppBundle\Repository;
 
 use AppBundle\Model\Product;
+use GuzzleHttp\Client;
 
 class ProductRepository
 {
-    private $pdo;
+    private $client;
 
-    public function __construct(\PDO $pdo)
+    public function __construct()
     {
-        $this->pdo = $pdo;
+        $this->client = new Client([
+            'base_uri' => 'http://ec2-54-219-7-89.us-west-1.compute.amazonaws.com',
+        ]);
     }
 
     /**
@@ -18,10 +21,17 @@ class ProductRepository
      */
     public function findAll()
     {
-        $result = $this->pdo->query('SELECT * FROM product');
+        $response = $this->client->get('/products.json');
+
+        $data = json_decode($response->getBody(), true);
+        if (false === $data) {
+            // error handling
+            // PSR-7
+            throw new \Exception('Bad response! '.$response->getBody());
+        }
 
         $products = [];
-        foreach ($result as $row) {
+        foreach ($data as $row) {
             $product = new Product();
             $product->setId($row['id']);
             $product->setName($row['name']);
