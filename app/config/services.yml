@@ -20,3 +20,6 @@ services:
     query_string_authenticator:
         class: AppBundle\Security\QueryStringAuthenticator
         autowire: true
+
+    our_user_provider:
+        class: AppBundle\Security\OurUserProvider
