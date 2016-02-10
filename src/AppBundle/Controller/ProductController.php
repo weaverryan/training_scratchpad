@@ -14,8 +14,7 @@ class ProductController extends Controller
      */
     public function indexAction()
     {
-        $repo = new ProductRepository();
-        $products = $repo->findAll();
+        $products = $this->get('product_repository')->findAll();
 
         return $this->render('product/index.html.twig', [
             'products' => $products
