@@ -13,7 +13,10 @@ class ProductControllerTest extends \PHPUnit_Framework_TestCase
         $driver = new GoutteDriver();
         $session = new Session($driver);
 
-        $session->visit('http://localhost:9004/products');
+        $session->visit('http://localhost:9004/app_test.php/products');
         $this->assertEquals(200, $session->getStatusCode());
+
+        $page = $session->getPage();
+        $this->assertCount(2, $page->findAll('css', 'h3'));
     }
 }
