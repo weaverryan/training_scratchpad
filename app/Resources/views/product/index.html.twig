@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <a href="{{ path('product_new') }}">New Product</a>
+
     {% for product in products %}
         <div>
             <h3>{{ product.name }}</h3>
