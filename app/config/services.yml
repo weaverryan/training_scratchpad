@@ -23,3 +23,9 @@ services:
 
     our_user_provider:
         class: AppBundle\Security\OurUserProvider
+
+    random_voter:
+        class: AppBundle\Security\RandomVoter
+        autowire: true
+        tags:
+            - { name: security.voter }

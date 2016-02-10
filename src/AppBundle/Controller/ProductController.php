@@ -46,4 +46,17 @@ class ProductController extends Controller
             'form' => $form->createView()
         ]);
     }
+
+    /**
+     * @Route("/products/{id}", name="product_show")
+     */
+    public function showAction($id)
+    {
+        $product = $this->get('product_repository')
+            ->find($id);
+
+        $this->denyAccessUnlessGranted('EDIT', $product);
+
+        die('access granted!');
+    }
 }

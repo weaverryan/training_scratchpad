@@ -5,7 +5,11 @@
 
     {% for product in products %}
         <div>
-            <h3>{{ product.name }}</h3>
+            <h3>
+                <a href="{{ path('product_show', {'id': product.id}) }}">
+                    {{ product.name }}
+                </a>
+            </h3>
             {{ product.description }}
             {{ product.price }}
             {{ product.createdAt|date('Y-m-d') }}

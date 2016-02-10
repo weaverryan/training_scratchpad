@@ -53,6 +53,18 @@ class ProductRepository
     }
 
     /**
+     * @param $id
+     * @return Product
+     * @throws \Exception
+     */
+    public function find($id)
+    {
+        $data = $this->getJson(sprintf('/products/%s.json', $id));
+
+        return $this->hydrateProduct($data);
+    }
+
+    /**
      * @param string $uri
      * @return array
      * @throws \Exception
@@ -69,5 +81,17 @@ class ProductRepository
         }
 
         return $data;
+    }
+
+    private function hydrateProduct(array $data)
+    {
+        $product = new Product();
+        $product->setId($data['id']);
+        $product->setName($data['name']);
+        $product->setDescription($data['description']);
+        $product->setPrice($data['price']);
+        $product->setCreatedAt(\DateTime::createFromFormat('Y-m-d H:i:s', $data['created_at']));
+
+        return $product;
     }
 }
