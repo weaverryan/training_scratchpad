@@ -34,4 +34,18 @@ class ProductRepository
 
         return $products;
     }
+
+    public function insert(Product $product)
+    {
+        $stmt = $this->pdo->prepare('
+            INSERT INTO product (name, description, price, created_at)
+            VALUES (:name, :description, :price, :createdAt)
+        ');
+        $stmt->bindValue(':name', $product->getName());
+        $stmt->bindValue(':description', $product->getDescription());
+        $stmt->bindValue(':price', $product->getPrice());
+        $stmt->bindValue(':createdAt', date('Y-m-d H:i:s'));
+
+        $stmt->execute();
+    }
 }

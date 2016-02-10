@@ -32,7 +32,12 @@ class ProductController extends Controller
 
         $form->handleRequest($request);
         if ($form->isValid()) {
-            dump($form->getData());die;
+            $this->get('product_repository')
+                ->insert($form->getData());
+
+            $this->addFlash('success', 'You did it!');
+
+            return $this->redirectToRoute('product_list');
         }
 
         return $this->render('product/new.html.twig', [
