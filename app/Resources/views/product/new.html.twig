@@ -6,7 +6,9 @@
     {{ form_start(form, {
         'attr': {'novalidate': 'novalidate'}
     }) }}
-        {{ form_widget(form) }}
+        {{ form_row(form.name) }}
+        {{ form_row(form.description) }}
+        {{ form_row(form.price) }}
 
         <button type="submit">Save</button>
     {{ form_end(form) }}
