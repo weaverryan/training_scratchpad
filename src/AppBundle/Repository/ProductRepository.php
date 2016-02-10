@@ -27,14 +27,7 @@ class ProductRepository
      */
     public function findAll()
     {
-        $response = $this->client->get('/products.json');
-
-        $data = json_decode($response->getBody(), true);
-        if (false === $data) {
-            // error handling
-            // PSR-7
-            throw new \Exception('Bad response! '.$response->getBody());
-        }
+        $data = $this->getJson('/products.json');
 
         $products = [];
         foreach ($data as $row) {
@@ -57,5 +50,24 @@ class ProductRepository
         $this->client->post('/products.json', [
             'body' => $this->serializer->serialize($product, 'json')
         ]);
+    }
+
+    /**
+     * @param string $uri
+     * @return array
+     * @throws \Exception
+     */
+    protected function getJson($uri)
+    {
+        $response = $this->client->get($uri);
+
+        $data = json_decode($response->getBody(), true);
+        if (false === $data) {
+            // error handling
+            // PSR-7
+            throw new \Exception('Bad response! '.$response->getBody());
+        }
+
+        return $data;
     }
 }

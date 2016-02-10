@@ -1,6 +1,9 @@
 imports:
     - { resource: config_dev.yml }
 
+parameters:
+    product_repository_class: AppBundle\Repository\Test\FakedProductRepository
+
 framework:
     test: ~
     session:
