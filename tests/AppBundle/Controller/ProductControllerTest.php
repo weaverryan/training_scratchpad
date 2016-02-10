@@ -2,16 +2,16 @@
 
 namespace Tests\AppBundle\Controller;
 
+use AppBundle\Test\FunctionalTestCase;
 use Behat\Mink\Driver\GoutteDriver;
 use Behat\Mink\Session;
 use GuzzleHttp\Client;
 
-class ProductControllerTest extends \PHPUnit_Framework_TestCase
+class ProductControllerTest extends FunctionalTestCase
 {
     public function testListProducts()
     {
-        $driver = new GoutteDriver();
-        $session = new Session($driver);
+        $session = $this->getSession();
 
         $session->visit('http://localhost:9004/app_test.php/products');
         $this->assertEquals(200, $session->getStatusCode());
@@ -22,8 +22,7 @@ class ProductControllerTest extends \PHPUnit_Framework_TestCase
 
     public function testAddProducts()
     {
-        $driver = new GoutteDriver();
-        $session = new Session($driver);
+        $session = $this->getSession();
 
         $session->visit('http://localhost:9004/app_test.php/products');
 
