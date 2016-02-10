@@ -1,0 +1,13 @@
+services:
+    api.client.api_client:
+        class: GuzzleHttp\Client
+        arguments:
+            -
+                base_uri: http://ec2-54-219-7-89.us-west-1.compute.amazonaws.com
+
+    api.repository.product_repository:
+        class: AppBundle\Repository\ProductRepository
+        arguments:
+            - '@api.client.api_client'
+            - '@logger'
+            - '@serializer'
