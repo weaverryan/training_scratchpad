@@ -15,4 +15,12 @@ class SecurityController extends Controller
     {
         // should not be executed
     }
+
+    /**
+     * @Route("/logout")
+     */
+    public function logoutAction()
+    {
+        // should not be executed
+    }
 }

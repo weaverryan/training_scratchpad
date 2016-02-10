@@ -23,5 +23,8 @@ security:
                 authenticators:
                     - query_string_authenticator
 
+            logout:
+                path: /logout
+
             # form_login: ~
             # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
