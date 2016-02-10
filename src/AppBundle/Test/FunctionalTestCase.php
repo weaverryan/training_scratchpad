@@ -25,7 +25,7 @@ class FunctionalTestCase extends KernelTestCase
 
     protected function visit($uri)
     {
-        $this->getSession()->visit('http://localhost:9004/app_test.php/'.ltrim($uri, '/'));
+        $baseUrl = getenv('TEST_BASE_URL');
+        $this->getSession()->visit($baseUrl.'/'.ltrim($uri, '/'));
     }
-
 }

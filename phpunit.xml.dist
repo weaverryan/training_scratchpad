@@ -19,6 +19,7 @@
 
     <php>
         <server name="KERNEL_DIR" value="app/" />
+        <env name="TEST_BASE_URL" value="http://localhost:9004" />
     </php>
 
     <filter>
