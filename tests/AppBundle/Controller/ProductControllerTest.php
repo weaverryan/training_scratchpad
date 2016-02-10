@@ -13,7 +13,7 @@ class ProductControllerTest extends FunctionalTestCase
     {
         $session = $this->getSession();
 
-        $session->visit('http://localhost:9004/app_test.php/products');
+        $this->visit('/products');
         $this->assertEquals(200, $session->getStatusCode());
 
         $page = $session->getPage();
@@ -24,7 +24,7 @@ class ProductControllerTest extends FunctionalTestCase
     {
         $session = $this->getSession();
 
-        $session->visit('http://localhost:9004/app_test.php/products');
+        $this->visit('/products');
 
         $page = $session->getPage();
         $page->clickLink('New Product');

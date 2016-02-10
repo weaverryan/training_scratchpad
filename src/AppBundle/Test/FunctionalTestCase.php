@@ -22,4 +22,10 @@ class FunctionalTestCase extends KernelTestCase
 
         return $this->session;
     }
+
+    protected function visit($uri)
+    {
+        $this->getSession()->visit('http://localhost:9004/app_test.php/'.ltrim($uri, '/'));
+    }
+
 }
