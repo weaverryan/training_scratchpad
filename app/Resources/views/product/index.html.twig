@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {% for product in rows %}
+    {% for product in products %}
         <div>
             <h3>{{ product.name }}</h3>
             {{ product.description }}
             {{ product.price }}
-            {{ product.created_at }}
+            {{ product.createdAt|date('Y-m-d') }}
         </div>
     {% endfor %}
 {% endblock %}
