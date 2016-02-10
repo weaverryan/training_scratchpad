@@ -154,7 +154,47 @@
             "id": "functional-base-url-env-var",
             "name": "Functional: base url env var",
             "description": null
+        },
+        {
+            "id": "security-basic-http-auth-setup",
+            "name": "Security: Basic http auth setup",
+            "description": null
+        },
+        {
+            "id": "security-setting-up-memory-users",
+            "name": "Security: Setting up memory users",
+            "description": null
+        },
+        {
+            "id": "security-empty-user-class",
+            "name": "Security: Empty User class",
+            "description": null
+        },
+        {
+            "id": "security-finish-user-class",
+            "name": "Security: Finish User class",
+            "description": null
+        },
+        {
+            "id": "security-empty-authenticator",
+            "name": "Security: Empty authenticator",
+            "description": null
+        },
+        {
+            "id": "security-fill-in-authenticator",
+            "name": "Security: Fill in authenticator",
+            "description": null
+        },
+        {
+            "id": "security-userprovider",
+            "name": "Security: UserProvider",
+            "description": null
+        },
+        {
+            "id": "security-logout",
+            "name": "Security: Logout",
+            "description": null
         }
     ],
-    "sha": "826a54a2059530e400ad5075582148414d413ac8"
+    "sha": "df3abac36fcc7a80b6ebea2eb4d8b171f6a9f3f1"
 }

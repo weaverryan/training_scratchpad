@@ -1,0 +1,161 @@
+diff --git a/app/Resources/views/base.html.twig b/app/Resources/views/base.html.twig
+index fb88e17..e31fd4a 100644
+--- a/app/Resources/views/base.html.twig
++++ b/app/Resources/views/base.html.twig
+@@ -10,6 +10,9 @@
+     {% for msg in app.session.flashbag.get('success') %}
+         {{ msg }}
+     {% endfor %}
++    {% for msg in app.session.flashbag.get('error') %}
++        {{ msg }}
++    {% endfor %}
+         {% block body %}{% endblock %}
+         {% block javascripts %}{% endblock %}
+     </body>
+diff --git a/app/config/security.yml b/app/config/security.yml
+index c2729f8..ae74094 100644
+--- a/app/config/security.yml
++++ b/app/config/security.yml
+@@ -10,7 +10,7 @@ security:
+         in_memory:
+             memory:
+                 users:
+-                    cool_user:
++                    cool_user2:
+                         password: foo
+                         roles: [ROLE_USER]
+ 
+@@ -24,7 +24,11 @@ security:
+             anonymous: ~
+             # activate different ways to authenticate
+ 
+-            http_basic: ~
++            # http_basic: ~
++
++            guard:
++                authenticators:
++                    - query_string_authenticator
+ 
+             # form_login: ~
+             # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
+diff --git a/app/config/services.yml b/app/config/services.yml
+index d3ccf8c..058c39e 100644
+--- a/app/config/services.yml
++++ b/app/config/services.yml
+@@ -16,3 +16,7 @@ services:
+         arguments:
+             -
+                 base_uri: http://ec2-54-219-7-89.us-west-1.compute.amazonaws.com
++
++    query_string_authenticator:
++        class: AppBundle\Security\QueryStringAuthenticator
++        autowire: true
+diff --git a/src/AppBundle/Controller/SecurityController.php b/src/AppBundle/Controller/SecurityController.php
+new file mode 100644
+index 0000000..0db9479
+--- /dev/null
++++ b/src/AppBundle/Controller/SecurityController.php
+@@ -0,0 +1,18 @@
++<?php
++
++namespace AppBundle\Controller;
++
++use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
++use Symfony\Bundle\FrameworkBundle\Controller\Controller;
++use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
++
++class SecurityController extends Controller
++{
++    /**
++     * @Route("/login")
++     */
++    public function loginAction()
++    {
++        // should not be executed
++    }
++}
+diff --git a/src/AppBundle/Security/QueryStringAuthenticator.php b/src/AppBundle/Security/QueryStringAuthenticator.php
+index 5286820..afa2e81 100644
+--- a/src/AppBundle/Security/QueryStringAuthenticator.php
++++ b/src/AppBundle/Security/QueryStringAuthenticator.php
+@@ -2,8 +2,11 @@
+ 
+ namespace AppBundle\Security;
+ 
++use AppBundle\Model\User;
++use Symfony\Component\HttpFoundation\RedirectResponse;
+ use Symfony\Component\HttpFoundation\Request;
+ use Symfony\Component\HttpFoundation\Response;
++use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+ use Symfony\Component\Security\Core\Exception\AuthenticationException;
+ use Symfony\Component\Security\Core\User\UserInterface;
+@@ -12,38 +15,61 @@ use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
+ 
+ class QueryStringAuthenticator extends AbstractGuardAuthenticator
+ {
++    private $urlGenerator;
++
++    public function __construct(UrlGeneratorInterface $urlGenerator)
++    {
++        $this->urlGenerator = $urlGenerator;
++    }
++
+     public function getCredentials(Request $request)
+     {
+-        // TODO: Implement getCredentials() method.
++        if ($request->getPathInfo() != '/login') {
++            return;
++        }
++
++        return $request->query->get('username');
+     }
+ 
+     public function getUser($credentials, UserProviderInterface $userProvider)
+     {
+-        // TODO: Implement getUser() method.
++        return new User($credentials);
+     }
+ 
+     public function checkCredentials($credentials, UserInterface $user)
+     {
+-        // TODO: Implement checkCredentials() method.
++        return true;
+     }
+ 
+     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
+     {
+-        // TODO: Implement onAuthenticationFailure() method.
++        $request->getSession()->getFlashbag()->add('error', $exception->getMessageKey());
++
++        $url = $this->urlGenerator->generate('homepage');
++
++        return new RedirectResponse($url);
+     }
+ 
+     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
+     {
+-        // TODO: Implement onAuthenticationSuccess() method.
++        $request->getSession()->getFlashbag()->add('success', 'Yay! You are authenticated!');
++
++        $url = $this->urlGenerator->generate('homepage');
++
++        return new RedirectResponse($url);
+     }
+ 
+     public function supportsRememberMe()
+     {
+-        // TODO: Implement supportsRememberMe() method.
++        return true;
+     }
+ 
+     public function start(Request $request, AuthenticationException $authException = null)
+     {
+-        // TODO: Implement start() method.
++        $request->getSession()->getFlashbag()->add('error', 'You need to login by going to /login?username=');
++
++        $url = $this->urlGenerator->generate('homepage');
++
++        return new RedirectResponse($url);
+     }
+ }

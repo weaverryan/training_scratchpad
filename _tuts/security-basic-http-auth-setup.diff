@@ -1,0 +1,27 @@
+diff --git a/app/config/security.yml b/app/config/security.yml
+index 8072372..0b64321 100644
+--- a/app/config/security.yml
++++ b/app/config/security.yml
+@@ -17,8 +17,7 @@ security:
+             anonymous: ~
+             # activate different ways to authenticate
+ 
+-            # http_basic: ~
+-            # http://symfony.com/doc/current/book/security.html#a-configuring-how-your-users-will-authenticate
++            http_basic: ~
+ 
+             # form_login: ~
+             # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
+diff --git a/src/AppBundle/Controller/ProductController.php b/src/AppBundle/Controller/ProductController.php
+index 23030b0..654133f 100644
+--- a/src/AppBundle/Controller/ProductController.php
++++ b/src/AppBundle/Controller/ProductController.php
+@@ -16,6 +16,8 @@ class ProductController extends Controller
+      */
+     public function indexAction()
+     {
++        $this->denyAccessUnlessGranted('ROLE_USER');
++
+         $products = $this->get('product_repository')->findAll();
+ 
+         return $this->render('product/index.html.twig', [

@@ -1,0 +1,73 @@
+diff --git a/app/config/security.yml b/app/config/security.yml
+index ae74094..a5bdd1f 100644
+--- a/app/config/security.yml
++++ b/app/config/security.yml
+@@ -2,17 +2,10 @@
+ # http://symfony.com/doc/current/book/security.html
+ security:
+ 
+-    encoders:
+-        Symfony\Component\Security\Core\User\User: plaintext
+-
+     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
+     providers:
+-        in_memory:
+-            memory:
+-                users:
+-                    cool_user2:
+-                        password: foo
+-                        roles: [ROLE_USER]
++        our_cool_user_provider:
++            id: our_user_provider
+ 
+     firewalls:
+         # disables authentication for assets and the profiler, adapt it according to your needs
+diff --git a/app/config/services.yml b/app/config/services.yml
+index 058c39e..4961c49 100644
+--- a/app/config/services.yml
++++ b/app/config/services.yml
+@@ -20,3 +20,6 @@ services:
+     query_string_authenticator:
+         class: AppBundle\Security\QueryStringAuthenticator
+         autowire: true
++
++    our_user_provider:
++        class: AppBundle\Security\OurUserProvider
+diff --git a/src/AppBundle/Security/OurUserProvider.php b/src/AppBundle/Security/OurUserProvider.php
+new file mode 100644
+index 0000000..03cd551
+--- /dev/null
++++ b/src/AppBundle/Security/OurUserProvider.php
+@@ -0,0 +1,31 @@
++<?php
++
++namespace AppBundle\Security;
++
++use AppBundle\Model\User;
++use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
++use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
++use Symfony\Component\Security\Core\User\UserInterface;
++use Symfony\Component\Security\Core\User\UserProviderInterface;
++
++class OurUserProvider implements UserProviderInterface
++{
++    // used by remember_me and switch_user
++    public function loadUserByUsername($username)
++    {
++        return new User($username);
++    }
++
++    // used for session-based auth
++    public function refreshUser(UserInterface $user)
++    {
++        return $user;
++    }
++
++    public function supportsClass($class)
++    {
++        // we only have 1 user class
++        return true;
++    }
++
++}
+\ No newline at end of file

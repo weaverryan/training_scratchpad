@@ -1,0 +1,39 @@
+diff --git a/src/AppBundle/Model/User.php b/src/AppBundle/Model/User.php
+new file mode 100644
+index 0000000..5c95f87
+--- /dev/null
++++ b/src/AppBundle/Model/User.php
+@@ -0,0 +1,33 @@
++<?php
++
++namespace AppBundle\Model;
++
++use Symfony\Component\Security\Core\User\UserInterface;
++
++class User implements UserInterface
++{
++    public function getUsername()
++    {
++        // TODO: Implement getUsername() method.
++    }
++
++    public function getRoles()
++    {
++        // TODO: Implement getUsername() method.
++    }
++
++    public function getPassword()
++    {
++        // TODO: Implement getPassword() method.
++    }
++
++    public function getSalt()
++    {
++        // TODO: Implement getSalt() method.
++    }
++
++    public function eraseCredentials()
++    {
++        // TODO: Implement eraseCredentials() method.
++    }
++}
