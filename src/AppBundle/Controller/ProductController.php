@@ -20,6 +20,8 @@ class ProductController extends Controller
 
         $products = $this->get('product_repository')->findAll();
 
+        $this->get('serializer')->serialize($products, 'json');
+
         return $this->render('product/index.html.twig', [
             'products' => $products
         ]);

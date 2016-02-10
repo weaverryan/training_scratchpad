@@ -10,6 +10,7 @@ services:
         arguments:
             - '@api_client'
             - '@logger'
+            - '@serializer'
 
     api_client:
         class: GuzzleHttp\Client
@@ -29,3 +30,9 @@ services:
         autowire: true
         tags:
             - { name: security.voter }
+
+    our_serializer:
+        class: AppBundle\Serializer\OurSerializer
+        decorates: serializer
+        public: false
+        arguments: ['@our_serializer.inner', '@logger']
