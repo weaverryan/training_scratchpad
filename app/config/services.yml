@@ -6,7 +6,7 @@ parameters:
 services:
     product_repository:
         class: AppBundle\Repository\ProductRepository
-        arguments: ['@db_connection']
+        autowire: true
 
     db_connection:
         class: PDO
