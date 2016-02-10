@@ -6,3 +6,13 @@ parameters:
 services:
     product_repository:
         class: AppBundle\Repository\ProductRepository
+        arguments: ['@db_connection']
+
+    db_connection:
+        class: PDO
+        arguments:
+            - "sqlite:%kernel.root_dir%/data.db"
+        calls:
+            # setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION)
+            - method: setAttribute
+              arguments: [3, 2]
