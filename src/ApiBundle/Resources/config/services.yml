@@ -3,7 +3,8 @@ services:
         class: GuzzleHttp\Client
         arguments:
             -
-                base_uri: http://ec2-54-219-7-89.us-west-1.compute.amazonaws.com
+                base_uri: %api.host%
+        public: false
 
     api.repository.product_repository:
         class: AppBundle\Repository\ProductRepository

@@ -16,5 +16,9 @@ class ApiExtension extends Extension
             new FileLocator(__DIR__.'/../Resources/config')
         );
         $loader->load('services.yml');
+
+        $configuration = $this->getConfiguration($configs, $container);
+        $config = $this->processConfiguration($configuration, $configs);
+        $container->setParameter('api.host', $config['api_url']);
     }
 }

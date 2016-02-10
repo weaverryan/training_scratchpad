@@ -18,7 +18,7 @@ class ProductController extends Controller
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
 
-        $products = $this->get('product_repository')->findAll();
+        $products = $this->get('api.repository.product_repository')->findAll();
 
         $this->get('serializer')->serialize($products, 'json');
 
