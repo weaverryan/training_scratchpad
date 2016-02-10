@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Form\ProductForm;
 use AppBundle\Model\Product;
 use AppBundle\Repository\ProductRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -18,6 +19,18 @@ class ProductController extends Controller
 
         return $this->render('product/index.html.twig', [
             'products' => $products
+        ]);
+    }
+
+    /**
+     * @Route("/products/new", name="product_new")
+     */
+    public function newAction()
+    {
+        $form = $this->createForm(ProductForm::class);
+
+        return $this->render('product/new.html.twig', [
+            'form' => $form->createView()
         ]);
     }
 }
