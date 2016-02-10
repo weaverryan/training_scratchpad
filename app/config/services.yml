@@ -7,6 +7,9 @@ services:
     product_repository:
         class: AppBundle\Repository\ProductRepository
         autowire: true
+        arguments:
+            - '@api_client'
+            - '@logger'
 
     api_client:
         class: GuzzleHttp\Client

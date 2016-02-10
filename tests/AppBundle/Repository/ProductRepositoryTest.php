@@ -29,7 +29,9 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $client->get('/products.json')
             ->willReturn(new Response(200, [], json_encode($productsData)));
 
-        $repo = new ProductRepository($client->reveal());
+        $logger = $this->prophesize('Psr\Log\LoggerInterface');
+
+        $repo = new ProductRepository($client->reveal(), $logger->reveal());
 
         $products = $repo->findAll();
         $this->assertCount(2, $products);

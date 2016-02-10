@@ -4,14 +4,18 @@ namespace AppBundle\Repository;
 
 use AppBundle\Model\Product;
 use GuzzleHttp\Client;
+use Psr\Log\LoggerInterface;
 
 class ProductRepository
 {
     private $client;
 
-    public function __construct(Client $client)
+    private $logger;
+
+    public function __construct(Client $client, LoggerInterface $logger)
     {
         $this->client = $client;
+        $this->logger = $logger;
     }
 
     /**
@@ -39,6 +43,7 @@ class ProductRepository
 
             $products[] = $product;
         }
+        $this->logger->info(sprintf('Returning %s products', count($products)));
 
         return $products;
     }
