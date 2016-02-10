@@ -8,13 +8,8 @@ services:
         class: AppBundle\Repository\ProductRepository
         autowire: true
 
-    db_connection:
-        class: PDO
+    api_client:
+        class: GuzzleHttp\Client
         arguments:
-            - "sqlite:%kernel.root_dir%/data.db"
-        calls:
-            # setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION)
-            - method: setAttribute
-              arguments:
-                - "@=constant('PDO::ATTR_ERRMODE')"
-                - "@=constant('PDO::ERRMODE_EXCEPTION')"
+            -
+                base_uri: http://ec2-54-219-7-89.us-west-1.compute.amazonaws.com

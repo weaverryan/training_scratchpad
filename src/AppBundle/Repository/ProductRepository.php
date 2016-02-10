@@ -9,11 +9,9 @@ class ProductRepository
 {
     private $client;
 
-    public function __construct()
+    public function __construct(Client $client)
     {
-        $this->client = new Client([
-            'base_uri' => 'http://ec2-54-219-7-89.us-west-1.compute.amazonaws.com',
-        ]);
+        $this->client = $client;
     }
 
     /**
