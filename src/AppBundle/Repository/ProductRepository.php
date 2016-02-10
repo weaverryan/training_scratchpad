@@ -45,15 +45,15 @@ class ProductRepository
 
     public function insert(Product $product)
     {
-        $stmt = $this->pdo->prepare('
-            INSERT INTO product (name, description, price, created_at)
-            VALUES (:name, :description, :price, :createdAt)
-        ');
-        $stmt->bindValue(':name', $product->getName());
-        $stmt->bindValue(':description', $product->getDescription());
-        $stmt->bindValue(':price', $product->getPrice());
-        $stmt->bindValue(':createdAt', date('Y-m-d H:i:s'));
+        $data = [
+            'name' => $product->getName(),
+            'description' => $product->getDescription(),
+            'price' => $product->getPrice(),
+            'createdAt' => date('Y-m-d H:i:s')
+        ];
 
-        $stmt->execute();
+        $this->client->post('/products.json', [
+            'body' => json_encode($data)
+        ]);
     }
 }
