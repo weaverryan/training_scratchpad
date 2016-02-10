@@ -10,6 +10,9 @@
     {% for msg in app.session.flashbag.get('success') %}
         {{ msg }}
     {% endfor %}
+    {% for msg in app.session.flashbag.get('error') %}
+        {{ msg }}
+    {% endfor %}
         {% block body %}{% endblock %}
         {% block javascripts %}{% endblock %}
     </body>

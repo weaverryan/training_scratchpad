@@ -16,3 +16,7 @@ services:
         arguments:
             -
                 base_uri: http://ec2-54-219-7-89.us-west-1.compute.amazonaws.com
+
+    query_string_authenticator:
+        class: AppBundle\Security\QueryStringAuthenticator
+        autowire: true
