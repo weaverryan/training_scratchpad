@@ -5,6 +5,7 @@ namespace AppBundle\Repository;
 use AppBundle\Model\Product;
 use GuzzleHttp\Client;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class ProductRepository
 {
@@ -12,10 +13,13 @@ class ProductRepository
 
     private $logger;
 
-    public function __construct(Client $client, LoggerInterface $logger)
+    private $serializer;
+
+    public function __construct(Client $client, LoggerInterface $logger, SerializerInterface $serializer)
     {
         $this->client = $client;
         $this->logger = $logger;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -50,15 +54,8 @@ class ProductRepository
 
     public function insert(Product $product)
     {
-        $data = [
-            'name' => $product->getName(),
-            'description' => $product->getDescription(),
-            'price' => $product->getPrice(),
-            'createdAt' => date('Y-m-d H:i:s')
-        ];
-
         $this->client->post('/products.json', [
-            'body' => json_encode($data)
+            'body' => $this->serializer->serialize($product, 'json')
         ]);
     }
 }
