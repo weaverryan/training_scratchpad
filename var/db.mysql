@@ -1,0 +1,54 @@
+-- MySQL dump 10.13  Distrib 5.5.37, for osx10.6 (i386)
+--
+-- Host: localhost    Database: training_scratchpad
+-- ------------------------------------------------------
+-- Server version	5.7.20
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `product`
+--
+
+DROP TABLE IF EXISTS `product`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `product` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `description` longtext COLLATE utf8_unicode_ci NOT NULL,
+  `price` double NOT NULL,
+  `created_at` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `product`
+--
+
+LOCK TABLES `product` WRITE;
+/*!40000 ALTER TABLE `product` DISABLE KEYS */;
+INSERT INTO `product` VALUES (1,'Minus nam in suscipit nam sit cum eum.','Et totam dicta sapiente. Officiis aut et voluptatibus fugit perferendis voluptates.',146,'2017-09-16 01:56:47'),(2,'Saepe minima quia dolor.','Dolor facilis aut temporibus natus dolores optio cum aut.',31,'2017-08-02 01:00:54'),(3,'Sint ea excepturi similique.','Enim magni dolore assumenda voluptatibus ea nam.',42,'2017-09-20 20:54:08'),(4,'Commodi quaerat fuga adipisci.','Saepe sed aliquam et magnam sint est. Temporibus nobis nam doloribus est repellat et fugiat.',144,'2018-04-29 15:43:36'),(5,'Optio occaecati sunt dolores enim et.','Quo porro tenetur repellat velit dolores autem ea. Ducimus modi exercitationem inventore adipisci repudiandae.',39,'2017-06-17 17:14:33'),(6,'Aliquid tenetur exercitationem molestias sit.','A unde voluptas vitae. Accusantium voluptas officiis esse.',150,'2017-11-17 07:53:32'),(7,'Veniam magni et omnis et saepe qui magni.','Distinctio consectetur iste eum iure amet accusamus.',19,'2017-08-26 06:14:53'),(8,'Id ipsum ut est aut.','Quia maiores eos delectus et amet quia quas.',70,'2017-06-27 03:10:29'),(9,'Quod porro sequi in ullam.','Ipsam ut nisi quod omnis ullam magnam.',110,'2017-08-08 04:20:50'),(10,'Et quis ratione hic corporis rerum.','Id dolor sed inventore perspiciatis qui rerum vero ut.',69,'2017-08-12 16:48:06');
+/*!40000 ALTER TABLE `product` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2018-06-11  7:56:11
